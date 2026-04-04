@@ -2,7 +2,7 @@
 
 ![Crates.io](https://img.shields.io/crates/v/quickbloom.svg)
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
-![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/raseshshetty/quickbloom/rust.yml)
+![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/Rasesh2005/quickbloom/rust.yml)
 
 **`quickbloom`** is an industry-grade, highly scalable, and concurrent Bloom Filter library for Rust. Unlike generic implementations, it allows for unbounded layer growth, multi-threaded access without locking overhead, and fully deterministic file-based serialization right out of the box.
 

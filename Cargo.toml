@@ -5,7 +5,7 @@ edition = "2021"
 authors = ["Rasesh Shetty"]
 license = "MIT"
 description = "A fast and simple Bloom filter with automatic persistence."
-repository = "https://github.com/your-username/quickbloom"
+repository = "https://github.com/Rasesh2005/quickbloom"
 keywords = ["bloom-filter", "probabilistic", "datastructures"]
 categories = ["data-structures", "algorithms"]
 
