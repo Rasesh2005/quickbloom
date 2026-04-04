@@ -4,7 +4,7 @@
 //! by Almeida et al. (2007).
 
 use std::hash::Hash;
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 
 use crate::config::BloomConfig;
 use crate::BloomFilter;
