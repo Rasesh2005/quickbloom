@@ -1,0 +1,22 @@
+[package]
+name = "quickbloom"
+version = "0.1.0"
+edition = "2021"
+authors = ["Rasesh Shetty"]
+license = "MIT"
+description = "A fast and simple Bloom filter with automatic persistence."
+repository = "https://github.com/your-username/quickbloom"
+keywords = ["bloom-filter", "probabilistic", "datastructures"]
+categories = ["data-structures", "algorithms"]
+
+[dependencies]
+bitvec = "1.0"
+twox-hash = "1.6"
+
+[dev-dependencies]
+rand = "0.8"
+criterion = "0.4"
+
+[[bench]]
+name = "bloom_bench"
+harness = false

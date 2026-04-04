@@ -1,0 +1,36 @@
+name: Rust CI
+
+on:
+  push:
+    branches: [ "*" ]
+  pull_request:
+    branches: [ "*" ]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  test:
+    name: Build & Test
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Install latest stable Rust
+      uses: dtolnay/rust-toolchain@stable
+      
+    - name: Cache dependencies
+      uses: Swatinem/rust-cache@v2
+      
+    - name: Build
+      run: cargo build --verbose
+      
+    - name: Run unit & integration tests
+      run: cargo test --verbose
+      
+    - name: Verify benchmarks compile
+      run: cargo bench --no-run
+      
+    - name: Check code formatting
+      run: cargo fmt -- --check
