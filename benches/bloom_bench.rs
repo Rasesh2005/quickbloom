@@ -54,21 +54,25 @@ fn bench_concurrent_atomic(c: &mut Criterion) {
     let filter = Arc::new(AtomicBloomFilter::new(SIZE, HASHES));
     let mut group = c.benchmark_group("concurrent");
     for threads in [1usize, 4, 8].iter() {
-        group.bench_with_input(BenchmarkId::new("atomic_threads", threads), threads, |b, &n| {
-            b.iter(|| {
-                let handles: Vec<_> = (0..n)
-                    .map(|_| {
-                        let f = Arc::clone(&filter);
-                        std::thread::spawn(move || {
-                            f.insert(black_box(&"concurrent_item"));
+        group.bench_with_input(
+            BenchmarkId::new("atomic_threads", threads),
+            threads,
+            |b, &n| {
+                b.iter(|| {
+                    let handles: Vec<_> = (0..n)
+                        .map(|_| {
+                            let f = Arc::clone(&filter);
+                            std::thread::spawn(move || {
+                                f.insert(black_box(&"concurrent_item"));
+                            })
                         })
-                    })
-                    .collect();
-                for h in handles {
-                    h.join().unwrap();
-                }
-            })
-        });
+                        .collect();
+                    for h in handles {
+                        h.join().unwrap();
+                    }
+                })
+            },
+        );
     }
     group.finish();
 }

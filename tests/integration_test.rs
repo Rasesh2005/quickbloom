@@ -1,4 +1,4 @@
-use quickbloom::{AtomicBloomFilter, BloomFilter, BloomMode, BloomConfig, ScalableBloomFilter};
+use quickbloom::{AtomicBloomFilter, BloomConfig, BloomFilter, BloomMode, ScalableBloomFilter};
 use std::path::Path;
 use std::sync::Arc;
 
@@ -75,8 +75,7 @@ fn test_blocked_persistence() {
     }
 
     {
-        let mut filter = BloomFilter::with_mode(5000, 5, BloomMode::Blocked)
-            .with_persistence(path);
+        let mut filter = BloomFilter::with_mode(5000, 5, BloomMode::Blocked).with_persistence(path);
         filter.insert(&"blocked_persist");
         filter.save().unwrap();
     }

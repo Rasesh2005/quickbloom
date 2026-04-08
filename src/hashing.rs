@@ -11,8 +11,7 @@
 //! The quadratic term `i^2` reduces clustering that can occur in pure double
 //! hashing at high fill ratios, improving the false-positive rate in practice.
 
-use ahash::AHasher;
-use std::hash::{BuildHasher, Hash, Hasher};
+use std::hash::Hash;
 
 /// Generates Bloom filter hash indices using enhanced double hashing.
 ///
@@ -53,8 +52,6 @@ impl HashGenerator {
         let lo = seed as u64;
         let hi = (seed >> 64) as u64;
         let state = ahash::RandomState::with_seeds(lo, hi, lo ^ hi, lo.wrapping_add(hi));
-        let mut hasher: AHasher = state.build_hasher();
-        item.hash(&mut hasher);
-        hasher.finish()
+        state.hash_one(item)
     }
 }

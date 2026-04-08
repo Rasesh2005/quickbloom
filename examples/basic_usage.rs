@@ -24,7 +24,10 @@ fn main() {
         let (size, hashes) = config.parameters();
         let mut filter = BloomFilter::with_mode(size, hashes, BloomMode::Blocked);
         filter.insert(&"cache_friendly");
-        println!("[Blocked] cache_friendly: {}", filter.contains(&"cache_friendly"));
+        println!(
+            "[Blocked] cache_friendly: {}",
+            filter.contains(&"cache_friendly")
+        );
         println!("[Blocked] fill ratio:     {:.4}\n", filter.fill_ratio());
     }
 
@@ -61,8 +64,14 @@ fn main() {
         for h in handles {
             h.join().unwrap();
         }
-        println!("[Atomic] thread_0 present: {}", filter.contains(&"thread_0".to_string()));
-        println!("[Atomic] thread_3 present: {}", filter.contains(&"thread_3".to_string()));
+        println!(
+            "[Atomic] thread_0 present: {}",
+            filter.contains(&"thread_0".to_string())
+        );
+        println!(
+            "[Atomic] thread_3 present: {}",
+            filter.contains(&"thread_3".to_string())
+        );
         println!("[Atomic] fill ratio: {:.4}", filter.fill_ratio());
     }
 }
