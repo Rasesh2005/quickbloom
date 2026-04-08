@@ -64,7 +64,7 @@ jobs:
         uses: Swatinem/rust-cache@v2
 
       - name: Run benchmarks
-        run: cargo bench -- --output-format bencher | tee output.txt
+        run: cargo bench -p quickbloom -- --output-format bencher | tee output.txt
 
       - name: Store benchmark results
         uses: benchmark-action/github-action-benchmark@v1
@@ -79,8 +79,4 @@ jobs:
           fail-on-alert: true
           gh-pages-branch: gh-pages
           benchmark-data-dir-path: dev/bench
-          skip-fetch-gh-pages: false
-          comment-always: false
-          summary-always: false
           save-data-file: true
-          go-force-package-suffix: false
