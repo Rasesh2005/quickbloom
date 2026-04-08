@@ -8,7 +8,7 @@
 //! |------|-------------|--------|-------------|
 //! | [`BloomFilter`] | single-threaded (or wrap in [`ConcurrentBloomFilter`]) | fixed | ✅ via path |
 //! | [`ScalableBloomFilter`] | single-threaded (or wrap in [`ConcurrentBloomFilter`]) | ✅ auto | ✅ via path |
-//! | [`AtomicBloomFilter`] | ✅ fully lock-free | fixed | manual |
+//! | [`AtomicBloomFilter`] | ✅ fully lock-free (**BETA**) | fixed | manual |
 //!
 //! ## Bloom Mode
 //!

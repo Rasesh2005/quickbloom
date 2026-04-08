@@ -5,10 +5,9 @@
 //! - **Lock-based** (`ConcurrentBloomFilter::new`): Wraps any filter in an
 //!   `Arc<RwLock>`. Simple and correct but can contend under heavy write load.
 //!
-//! - **Lock-free** (`AtomicBloomFilter`): Uses a flat array of `AtomicU8`
-//!   bytes. Multiple threads can insert and query simultaneously without ever
-//!   blocking. The trade-off is that the size is fixed at construction time
-//!   (no scalable growth) and persistence must be triggered explicitly.
+//! - **Lock-free** ([`AtomicBloomFilter`]): **[BETA]** Uses a flat array of
+//!   `AtomicU8` bytes. Multiple threads can insert and query simultaneously
+//!   without ever blocking.
 
 use std::hash::Hash;
 use std::sync::atomic::{AtomicU8, Ordering};
@@ -89,6 +88,9 @@ impl<F> ConcurrentBloomFilter<F> {
 // ─────────────────────────────────────────────────────────────────────────────
 
 /// A fully lock-free, thread-safe Bloom filter backed by `AtomicU8` bytes.
+///
+/// > [!IMPORTANT]
+/// > **BETA PHASE**: This type is currently in active development.
 ///
 /// All `insert` and `contains` calls use relaxed atomic operations so many
 /// threads can operate simultaneously without ever blocking or locking.

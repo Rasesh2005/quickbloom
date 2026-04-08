@@ -49,7 +49,7 @@ assert!(!filter.contains(&"bob")); // false – definitely absent
 | [`BloomFilter`](#bloomfilter) | Single-threaded, general use | No | No | ✅ |
 | [`ScalableBloomFilter`](#scalablebloomfilter) | Unbounded / unknown data sets | No (wrap in `ConcurrentBloomFilter`) | ✅ | ✅ |
 | [`ConcurrentBloomFilter`](#concurrentbloomfilter) | Read-heavy multi-thread workloads | `RwLock` | Depends on `F` | Depends on `F` |
-| [`AtomicBloomFilter`](#atomicbloomfilter) | Write-heavy lock-free hot paths | Atomic | No | Manual |
+| [`AtomicBloomFilter`](#atomicbloomfilter) | Write-heavy lock-free hot paths (**BETA**) | Atomic | No | Manual |
 
 ---
 
@@ -191,7 +191,10 @@ assert!(f.read(|inner| inner.contains(&"from_thread")));
 
 ---
 
-## `AtomicBloomFilter`
+## `AtomicBloomFilter` (**BETA**)
+
+> [!WARNING]
+> `AtomicBloomFilter` is currently in **Beta**. While functionally complete and high-performance, the API and internal representation may evolve. Use with caution in critical production paths.
 
 A fully lock-free Bloom filter backed by `AtomicU8` bytes. Any number of threads can `insert` and `contains` simultaneously without blocking.
 
@@ -278,6 +281,25 @@ The binary persistence format is versioned (`v3`). Files saved by an older versi
 - For scalable filters: config parameters, growth factors, then each layer as above.
 
 ---
+
+## Benchmarks
+
+To ensure industry-grade performance, we benchmarked **`quickbloom v0.2.0`** against the established `fastbloom v0.9.0` crate.
+
+### Test Environment
+- **Hardware**: Apple M1 Max
+- **Task**: 1,000,000 operations on strings (`"user_12345"`)
+- **Parameters**: 1,000,000 bits, 7 hash functions
+
+| Crate | Mode | Avg Latency (Insert) |
+| :--- | :--- | :--- |
+| **quickbloom v0.2.0** | **Blocked (Cache-Line)** | **14.78 ns** |
+| **quickbloom v0.2.0** | Standard | **16.17 ns** |
+| `fastbloom v0.9.0` | Blocked (512-bit) | 18.56 ns |
+| `fastbloom v0.9.0` | Standard | 18.77 ns |
+
+> [!TIP]
+> With the switch to **`ahash`** and our optimized **Blocked Layout**, `quickbloom` now provides top-tier throughput that is competitive with and often exceeds established high-performance implementations.
 
 ## Authors
 
