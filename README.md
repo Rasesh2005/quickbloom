@@ -287,16 +287,16 @@ The binary persistence format is versioned (`v3`). Files saved by an older versi
 To ensure industry-grade performance, we benchmarked **`quickbloom v0.2.0`** against the established `fastbloom v0.9.0` crate.
 
 ### Test Environment
-- **Hardware**: Apple M1 Max
+- **Hardware**: Apple M3 Pro
 - **Task**: 1,000,000 operations on strings (`"user_12345"`)
 - **Parameters**: 1,000,000 bits, 7 hash functions
 
 | Crate | Mode | Avg Latency (Insert) |
 | :--- | :--- | :--- |
-| **quickbloom v0.2.0** | **Blocked (Cache-Line)** | **14.78 ns** |
-| **quickbloom v0.2.0** | Standard | **16.17 ns** |
-| `fastbloom v0.9.0` | Blocked (512-bit) | 18.56 ns |
-| `fastbloom v0.9.0` | Standard | 18.77 ns |
+| **quickbloom v0.2.0** | **Blocked (Cache-Line)** | **13.92 ns** |
+| **quickbloom v0.2.0** | Standard | **15.75 ns** |
+| `fastbloom v0.9.0` | Standard | 18.45 ns |
+| `fastbloom v0.9.0` | Blocked (512-bit) | 18.77 ns |
 
 > [!TIP]
 > With the switch to **`ahash`** and our optimized **Blocked Layout**, `quickbloom` now provides top-tier throughput that is competitive with and often exceeds established high-performance implementations.

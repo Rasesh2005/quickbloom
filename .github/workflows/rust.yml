@@ -13,24 +13,69 @@ jobs:
   test:
     name: Build & Test
     runs-on: ubuntu-latest
-
     steps:
-    - uses: actions/checkout@v4
-    
-    - name: Install latest stable Rust
-      uses: dtolnay/rust-toolchain@stable
+      - uses: actions/checkout@v4
+      - name: Install latest stable Rust
+        uses: dtolnay/rust-toolchain@stable
+      - name: Cache dependencies
+        uses: Swatinem/rust-cache@v2
+      - name: Build
+        run: cargo build --verbose
+      - name: Run unit & integration tests
+        run: cargo test --verbose
+
+  lint:
+    name: Deep Quality Analysis
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install latest stable Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          components: clippy, rustfmt
+      - name: Cache dependencies
+        uses: Swatinem/rust-cache@v2
       
-    - name: Cache dependencies
-      uses: Swatinem/rust-cache@v2
-      
-    - name: Build
-      run: cargo build --verbose
-      
-    - name: Run unit & integration tests
-      run: cargo test --verbose
-      
-    - name: Verify benchmarks compile
-      run: cargo bench --no-run
-      
-    - name: Check code formatting
-      run: cargo fmt -- --check
+      - name: Check formatting
+        run: cargo fmt -- --check
+        
+      - name: Run Clippy
+        run: cargo clippy -- -D warnings
+        
+      - name: Verify Documentation
+        run: cargo doc --no-deps
+        env:
+          RUSTDOCFLAGS: "-D warnings"
+
+      - name: Install cargo-audit
+        run: cargo install cargo-audit
+      - name: Security Audit (cargo-audit)
+        run: cargo audit
+
+  benchmark:
+    name: Performance Regression CI
+    runs-on: ubuntu-latest
+    # Only run on master to update the baseline, or on PRs to compare
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install latest stable Rust
+        uses: dtolnay/rust-toolchain@stable
+      - name: Cache dependencies
+        uses: Swatinem/rust-cache@v2
+
+      - name: Run benchmarks
+        run: cargo bench -- --output-format bencher | tee output.txt
+
+      - name: Store benchmark results
+        uses: benchmark-action/github-action-benchmark@v1
+        with:
+          name: Rust Benchmark
+          tool: 'cargo'
+          output-file-path: output.txt
+          # Use personal access token for writing to the gh-pages or separate branch if needed
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          auto-push: true
+          # Show alert on PR if performance regresses by more than 20%
+          alert-threshold: '120%'
+          comment-on-alert: true
+          fail-on-alert: true
