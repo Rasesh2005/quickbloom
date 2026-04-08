@@ -64,7 +64,7 @@ jobs:
         uses: Swatinem/rust-cache@v2
 
       - name: Run benchmarks
-        run: cargo bench -p quickbloom -- --output-format bencher | tee output.txt
+        run: cargo bench --bench bloom_bench -- --output-format bencher | tee output.txt
 
       - name: Store benchmark results
         uses: benchmark-action/github-action-benchmark@v1
