@@ -72,10 +72,15 @@ jobs:
           name: Rust Benchmark
           tool: 'cargo'
           output-file-path: output.txt
-          # Use personal access token for writing to the gh-pages or separate branch if needed
           github-token: ${{ secrets.GITHUB_TOKEN }}
           auto-push: true
-          # Show alert on PR if performance regresses by more than 20%
           alert-threshold: '120%'
           comment-on-alert: true
           fail-on-alert: true
+          gh-pages-branch: gh-pages
+          benchmark-data-dir-path: dev/bench
+          skip-fetch-gh-pages: false
+          comment-always: false
+          summary-always: false
+          save-data-file: true
+          go-force-package-suffix: false

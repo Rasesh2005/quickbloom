@@ -89,7 +89,7 @@ impl<F> ConcurrentBloomFilter<F> {
 
 /// A fully lock-free, thread-safe Bloom filter backed by `AtomicU8` bytes.
 ///
-/// > [!IMPORTANT]
+/// > \[!IMPORTANT\]
 /// > **BETA PHASE**: This type is currently in active development.
 ///
 /// All `insert` and `contains` calls use relaxed atomic operations so many
